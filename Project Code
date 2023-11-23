@@ -1,0 +1,29 @@
+import platform
+
+def block_ads():
+    # Define ad domains to block
+    ad_domains = [
+        "ad.doubleclick.net",
+        "adservice.google.com",
+        # Add more ad domains here
+    ]
+
+    # Determine the hosts file location based on the operating system
+    system = platform.system()
+    hosts_file_path = ""
+    if system == "Windows":
+        hosts_file_path = r"C:\Windows\System32\drivers\etc\hosts"
+    elif system == "Linux" or system == "Darwin":  # Linux or macOS
+        hosts_file_path = "/etc/hosts"
+
+    # Block ad domains by redirecting them to localhost
+    try:
+        with open(hosts_file_path, "a") as hosts_file:
+            for domain in ad_domains:
+                hosts_file.write(f"127.0.0.1 {domain}\n")
+        print("Ads blocked successfully!")
+    except PermissionError:
+        print("Permission denied. Please run this script as an administrator/superuser.")
+
+if __name__ == "__main__":
+    block_ads()
